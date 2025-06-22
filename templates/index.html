@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gemini Chatbot</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        h1 {
+            color: #4285f4;
+            text-align: center;
+        }
+        .chat-container {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        .message {
+            margin-bottom: 15px;
+            padding: 10px 15px;
+            border-radius: 18px;
+            max-width: 80%;
+            word-wrap: break-word;
+        }
+        .user-message {
+            background-color: #e3f2fd;
+            margin-left: auto;
+            text-align: right;
+            border-bottom-right-radius: 5px;
+        }
+        .assistant-message {
+            background-color: #f1f1f1;
+            margin-right: auto;
+            border-bottom-left-radius: 5px;
+        }
+        .message-form {
+            display: flex;
+            margin-top: 20px;
+        }
+        .message-input {
+            flex-grow: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        .send-button {
+            background-color: #4285f4;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin-left: 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .send-button:hover {
+            background-color: #3367d6;
+        }
+        .reset-button {
+            background-color: #f44336;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            display: block;
+            margin: 20px auto;
+        }
+        .reset-button:hover {
+            background-color: #d32f2f;
+        }
+        .error {
+            color: #f44336;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Gemini Chatbot</h1>
+    
+    {% if error %}
+    <div class="error">{{ error }}</div>
+    {% endif %}
+    
+    <div class="chat-container">
+        {% if chat_history %}
+            {% for message in chat_history %}
+                {% if message.role == 'user' %}
+                    <div class="message user-message">
+                        <strong>You:</strong> {{ message.content }}
+                    </div>
+                {% else %}
+                    <div class="message assistant-message">
+                        <strong>Gemini:</strong> {{ message.content }}
+                    </div>
+                {% endif %}
+            {% endfor %}
+        {% else %}
+            <div class="message assistant-message">
+                <strong>Gemini:</strong> Hello! I'm Gemini, an AI assistant. How can I help you today?
+            </div>
+        {% endif %}
+    </div>
+    
+    <form action="/chat" method="post" class="message-form">
+        <input type="text" name="message" placeholder="Type your message here..." class="message-input" required autofocus>
+        <button type="submit" class="send-button">Send</button>
+    </form>
+    
+    <a href="/reset"><button type="button" class="reset-button">Start New Chat</button></a>
+    
+    <script>
+        // Auto-scroll to the bottom of the chat container
+        document.addEventListener('DOMContentLoaded', function() {
+            var chatContainer = document.querySelector('.chat-container');
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        });
+    </script>
+</body>
+</html>
